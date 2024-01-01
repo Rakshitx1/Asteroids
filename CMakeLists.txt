@@ -24,7 +24,7 @@ set(SOURCES
 add_executable(MySFMLApp ${SOURCES})
 
 # Include directories for SFML and your custom include directory
-target_include_directories(MySFMLApp PRIVATE ${SFML_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/inc)
+target_include_directories(MySFMLApp PRIVATE ${SFML_INCLUDE_DIRS} inc res)
 
 # Link the executable with SFML libraries
 target_link_libraries(MySFMLApp PRIVATE sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
