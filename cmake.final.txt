@@ -24,7 +24,7 @@ set(SOURCES
 add_executable(MySFMLApp ${SOURCES})
 
 # Include directories for SFML and your custom include directory
-target_include_directories(MySFMLApp PRIVATE ${SFML_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/inc res)
+target_include_directories(MySFMLApp PRIVATE ${SFML_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/inc)
 
 # Link the executable with SFML libraries
 target_link_libraries(MySFMLApp PRIVATE sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
@@ -37,3 +37,17 @@ target_compile_options(MySFMLApp PRIVATE $<$<CONFIG:DEBUG>: -O0 -g -Wall>)
 
 # Set compiler flags for Release
 target_compile_options(MySFMLApp PRIVATE $<$<CONFIG:RELEASE>: -O3>)
+
+# Create a "Required" directory within the build directory
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/Required)
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/Required)
+
+# Copy SFML shared libraries to the "Required" directory
+add_custom_command(TARGET MySFMLApp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:sfml-graphics>
+        $<TARGET_FILE:sfml-window>
+        $<TARGET_FILE:sfml-system>
+        $<TARGET_FILE:sfml-audio>
+        $<TARGET_FILE:sfml-network>
+        $<TARGET_FILE_DIR:MySFMLApp>/Required)
