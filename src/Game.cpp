@@ -53,7 +53,7 @@ void Game::initPlayer() {
         std::cout << "ERROR::GAME::INITPLAYER::Failed to load player texture!" << std::endl;
     }
     this->player.setTexture(this->playerTexture);
-    this->player.setOrigin(this->player.getGlobalBounds().width / 2, this->player.getGlobalBounds().height / 2);
+    this->player.setOrigin(this->player.getGlobalBounds().width / 2 + 70, this->player.getGlobalBounds().height / 2 - 50);
     this->player.setScale(0.3f, 0.3f);
     this->player.setPosition(this->videoMode.width / 2, this->videoMode.height / 2);
     this->player.setRotation(-90.f);
@@ -75,6 +75,9 @@ void Game::pollEvents() {
                     this->window->close();
                     break;
                 }
+                if(this->sfEvent.key.code == sf::Keyboard::Space) {
+                    e = true;
+                }
                 if (this->sfEvent.key.code == sf::Keyboard::W || this->sfEvent.key.code == sf::Keyboard::Up) {
                     a = true;
                 }
@@ -86,9 +89,6 @@ void Game::pollEvents() {
                 }
                 if (this->sfEvent.key.code == sf::Keyboard::D || this->sfEvent.key.code == sf::Keyboard::Right) {
                     d = true;
-                }
-                if(this->sfEvent.key.code == sf::Keyboard::Space) {
-                    e = true;
                 }
                 break;
 
@@ -109,31 +109,7 @@ void Game::pollEvents() {
                     e = false;
                 }
                 break;
-    }
-    }
-    if (b) {
-        this->enemy.move(
-            -std::cos((this->enemy.getRotation() - 90) * M_PI / 180.f) * 4.f,
-            -std::sin((this->enemy.getRotation() - 90) * M_PI / 180.f) * 4.f
-        );
-    }
-    if (c) {
-        this->enemy.rotate(-3.f);
-    }
-    if (d) {
-        this->enemy.rotate(3.f);
         }
-    if (b) {
-        this->enemy.move(
-            -std::cos((this->enemy.getRotation() - 90) * M_PI / 180.f) * 4.f,
-            -std::sin((this->enemy.getRotation() - 90) * M_PI / 180.f) * 4.f
-        );
-    }
-    if (c) {
-        this->enemy.rotate(-3.f);
-    }
-    if (d) {
-        this->enemy.rotate(3.f);
     }
 }
 
@@ -151,7 +127,7 @@ void Game::updateEnemies() {
 }
 
 void Game::updatePlayer() {
-    const float playerSpeed = 9.6f;  // Adjust the player's movement speed as needed
+    const float playerSpeed = 4.f;  // Adjust the player's movement speed as needed
 
     // Update player position based on input
     if (a) {
@@ -179,13 +155,15 @@ void Game::updatePlayer() {
 
     if (playerPosition.x > windowSize.x) {
         this->player.setPosition(0.f, playerPosition.y);
-    } else if (playerPosition.x < 0.f) {
+    } 
+    else if (playerPosition.x < 0.f) {
         this->player.setPosition(windowSize.x, playerPosition.y);
     }
 
     if (playerPosition.y > windowSize.y) {
         this->player.setPosition(playerPosition.x, 0.f);
-    } else if (playerPosition.y < 0.f) {
+    } 
+    else if (playerPosition.y < 0.f) {
         this->player.setPosition(playerPosition.x, windowSize.y);
     }
 }
@@ -224,7 +202,7 @@ void Game::updateBullet() {
 
         // sf::Vector2f bulletInitialPosition = this->player.getPosition();// + bulletDirection; // Adjust with playerSize if needed
 
-        sf::Vector2f bulletInitialPosition(this->player.getPosition().x + bulletDirection.x - 15.f, this->player.getPosition().y + bulletDirection.y );
+        sf::Vector2f bulletInitialPosition(this->player.getPosition().x, this->player.getPosition().y);
 
         // Create a new bullet and set its properties
         Bullet* newBullet = new Bullet(bulletDirection, bulletInitialPosition);
@@ -239,7 +217,7 @@ void Game::updateBullet() {
         // Add the new bullet to the bullets vector
         this->bullets.push_back(newBullet);
 
-        // e = false;
+        e = false;
     }
 
     // Use a separate vector to store bullets to be removed
